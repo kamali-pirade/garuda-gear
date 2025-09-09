@@ -1,7 +1,9 @@
 # Tugas 2 PBP: Garuda Gear
 
 Nama: Lessyarta Kamali Sopamena Pirade
+
 NPM: 2406356643
+
 Kelas: PBP C
 
 Link PWS:
