@@ -96,36 +96,10 @@ dimanfaatkan oleh penyerang?
    Kemudian, saya membuat fungsi add_product(request) di views.py yang jika valid akan menyimpan data ke database dan redirect ke halaman utama.
    Saya juga membuat fungsi show_product(request, id) di views.py untuk menangani kasus produk tidak ditemukan dengan mengembalikan 404 dan mengirim data produk ke template product_detail.html
    
-   Lalu, menambahkan 4 fungsi views baru di views.py:
-   a) def show_xml(request):
-      - Mengambil semua data Product dari database menggunakan Product.objects.all()
-      - Menggunakan serializers.serialize("xml", product_list) untuk mengkonversi data ke format XML
-      - Mengembalikan HttpResponse dengan content_type="application/xml"
+   Lalu, menambahkan 4 fungsi views baru di views.py, yaitu def show_xml(request) yang mengkonversi data ke format XML, def show_json(request) yang mengkonversi data ke format JSON, def show_xml_by_id(request, news_id) yang mengambil produk berdasarkan ID dan mengkonversi hasil ke format XML, serta def show_json_by_id(request, news_id) yang mengambil satu produk berdasarkan ID dan mengkonversi hasil ke format JSON dan mengembalikan HttpResponse.
    
-   b) def show_json(request):
-      - Mengambil semua data Product dari database menggunakan Product.objects.all()
-      - Menggunakan serializers.serialize("json", product_list) untuk mengkonversi data ke format JSON
-      - Mengembalikan HttpResponse dengan content_type="application/json"
-   
-   c) def show_xml_by_id(request, news_id):
-      - Menggunakan Product.objects.filter(pk=news_id) untuk mengambil produk berdasarkan ID
-      - Mengimplementasikan try-except untuk menangani kasus produk tidak ditemukan
-      - Mengkonversi hasil ke format XML dan mengembalikan HttpResponse
-      - Jika produk tidak ditemukan, mengembalikan status 404
-   
-   d) def show_json_by_id(request, news_id):
-      - Menggunakan Product.objects.get(pk=news_id) untuk mengambil satu produk berdasarkan ID
-      - Membungkus hasil dalam list [product_item] karena serializer membutuhkan iterable
-      - Mengimplementasikan try-except untuk menangani kasus produk tidak ditemukan
-      - Mengkonversi hasil ke format JSON dan mengembalikan HttpResponse
-   
-   Saya juga membuat URL routing dengan menambahkan URL patterns di main/urls.py:
-   
-   Setelah implementasi selesai, saya melakukan testing dengan mengakses URL berikut:
-   - http://localhost:8000/xml/ untuk melihat semua produk dalam format XML
-   - http://localhost:8000/json/ untuk melihat semua produk dalam format JSON  
-   - http://localhost:8000/xml/[id]/ untuk melihat produk tertentu dalam format XML
-   - http://localhost:8000/json/[id]/ untuk melihat produk tertentu dalam format JSON
+   Saya juga membuat URL routing dengan menambahkan URL patterns di urls.py.
+   Setelah implementasi selesai, saya melakukan testing untuk melihat semua produk dalam format XML dan JSON, serta melihat produk tertentu dalam format XML dan JSON
 
 6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
    Tutorial 2 sangat jelas dan membantu dalam Tugas 3 PBP ini. Terima kasih banyak tim asisten dosen!
