@@ -59,16 +59,73 @@ Pertanyaan Tugas 2:
 Pertanyaan Tugas 3:
 
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
-
+   Data delivery sangat penting karena sebuah platform dinamis perlu mengirimkan data dari satu stack ke stack lainnya. Dalam kasus Garuda Gear, ini berarti mengirimkan data dari backend (server Django dan database) ke frontend (browser pengguna). Tanpa data delivery, Garuda Gear yang saya bangun hanya akan menjadi halaman HTML statis.
+   Dengan data delivery, garuda gear dapat:
+   1) Menampilkan katalog produk yang dijual, di mana saya menggunakan data delivery dalam format HTML untuk mengirimkan daftar produk dari database ke template main.html.
+   2) Menyediakan data untuk platform lain, di mana saya  mengimplementasikan endpoint yang mengembalikan data dalam format XML dan JSON.
 
 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+   Menurut saya, JSON lebih baik dan lebih modern untuk pengembangan web. Hal ini karena tampilan data di JSON lebih ringkas dan mudah saya baca. JSON lebih populer dibandingkan XML. Hal ini karena meskipun sintaks JSON berasal dari objek JavaScript dan JavaScript adalah bahasa dominan untuk frontend web. Hal ini membuat proses pengolahan data JSON di browser menjadi lebih natural. XML juga memerlukan proses parsing yang lebih rumit.
 
 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+   Method is_valid() berfungsi sebagai lapisan validasi data. Sebelum data yang dikirim pengguna dari form diizinkan untuk disimpan ke database, method is_valid() akan memeriksa apakah semua input sesuai dengan aturan yang ada di ProductForm dan Product model.
+   Misalnya, semua field wajib sudah terisi dan semua tipe data sudah benar.
 
 4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat 
 dimanfaatkan oleh penyerang?
+   csrf_token adalah token yang berfungsi sebagai security. Token ini di-generate secara otomatis oleh Django untuk mencegah serangan berbahaya. 
+   Jika saya tidak menambahkan csrf_token pada form tambah produk di Garuda Gear, maka form saya akan rentan terhadap serangan Cross-Site Request Forgery (CSRF). 
+   Skenario yang dapat dimanfaatkan oleh penyerang:
+   1) Saya login ke aplikasi Garuda Gear.
+   2) Saya mengunjungi website lain yang sudah dimasuki penyerang.
+   3) Webite tersebut memiliki kode yang secara diam-diam mengirimkan request POST ke URL tambah produk di aplikasi saya.
+   4) Karena saya masih login, request jahat tersebut akan membawa cookie sesi saya yang valid.
+   5) Tanpa csrf_token, server saya akan menganggap request tersebut sah dan akan memprosesnya (misalnya, menambahkan produk spam ke katalog saya) tanpa saya sadari.
+   Jika saya mempunyai csrf_token, setiap request POST dari browser pengguna harus menyertakan token unik yang cocok dengan yang ada di server. Penyerang tidak akan memiliki token ini, sehingga request dari penyerang akan ditolak dan serangan gagal.
 
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+   
+   Pertama, saya menyiapkan 4 fungsi baru di views.py, yaitu def show_xml(request), def show_json(request), def show_xml_by_id(request, news_id), dan def show_json_by_id(request, news_id).
+   Lalu saya memperbaiki bagian class Product dan category product dengan membuat class Product dengan field-field yang diperlukan: name, price, description, thumbnail, category, is_featured, stock, brand, dan menggunakan CATEGORY_CHOICES untuk memberikan pilihan kategori produk
+   Setelah itu saya membuat class ProductForm yang inherit dari ModelForm.
+
+   Saya menambahkan 2 file html baru:
+   1) Template add_product.html yang menyediakan tombol submit untuk menambahkan produk
+   2) Template product_detail.html yang bekerja untuk menampilkan detail lengkap produk termasuk nama, kategori, brand, stok, dan status bestseller, menampilkan gambar produk jika tersedia dan menampilkan tombol back untuk kembali ke daftar produk
+   
+   Kemudian, saya membuat fungsi add_product(request) di views.py yang jika valid akan menyimpan data ke database dan redirect ke halaman utama.
+   Saya juga membuat fungsi show_product(request, id) di views.py untuk menangani kasus produk tidak ditemukan dengan mengembalikan 404 dan mengirim data produk ke template product_detail.html
+   
+   Lalu, menambahkan 4 fungsi views baru di views.py:
+   a) def show_xml(request):
+      - Mengambil semua data Product dari database menggunakan Product.objects.all()
+      - Menggunakan serializers.serialize("xml", product_list) untuk mengkonversi data ke format XML
+      - Mengembalikan HttpResponse dengan content_type="application/xml"
+   
+   b) def show_json(request):
+      - Mengambil semua data Product dari database menggunakan Product.objects.all()
+      - Menggunakan serializers.serialize("json", product_list) untuk mengkonversi data ke format JSON
+      - Mengembalikan HttpResponse dengan content_type="application/json"
+   
+   c) def show_xml_by_id(request, news_id):
+      - Menggunakan Product.objects.filter(pk=news_id) untuk mengambil produk berdasarkan ID
+      - Mengimplementasikan try-except untuk menangani kasus produk tidak ditemukan
+      - Mengkonversi hasil ke format XML dan mengembalikan HttpResponse
+      - Jika produk tidak ditemukan, mengembalikan status 404
+   
+   d) def show_json_by_id(request, news_id):
+      - Menggunakan Product.objects.get(pk=news_id) untuk mengambil satu produk berdasarkan ID
+      - Membungkus hasil dalam list [product_item] karena serializer membutuhkan iterable
+      - Mengimplementasikan try-except untuk menangani kasus produk tidak ditemukan
+      - Mengkonversi hasil ke format JSON dan mengembalikan HttpResponse
+   
+   Saya juga membuat URL routing dengan menambahkan URL patterns di main/urls.py:
+   
+   Setelah implementasi selesai, saya melakukan testing dengan mengakses URL berikut:
+   - http://localhost:8000/xml/ untuk melihat semua produk dalam format XML
+   - http://localhost:8000/json/ untuk melihat semua produk dalam format JSON  
+   - http://localhost:8000/xml/[id]/ untuk melihat produk tertentu dalam format XML
+   - http://localhost:8000/json/[id]/ untuk melihat produk tertentu dalam format JSON
 
 6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
    Tutorial 2 sangat jelas dan membantu dalam Tugas 3 PBP ini. Terima kasih banyak tim asisten dosen!
