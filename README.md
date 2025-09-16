@@ -129,3 +129,6 @@ dimanfaatkan oleh penyerang?
 
 6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
    Tutorial 2 sangat jelas dan membantu dalam Tugas 3 PBP ini. Terima kasih banyak tim asisten dosen!
+
+Screenshot Postman:
+![All Products by XML](screenshots\PostmanXML.png)
