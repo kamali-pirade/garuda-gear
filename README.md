@@ -131,4 +131,7 @@ dimanfaatkan oleh penyerang?
    Tutorial 2 sangat jelas dan membantu dalam Tugas 3 PBP ini. Terima kasih banyak tim asisten dosen!
 
 Screenshot Postman:
-![All Products by XML](screenshots\PostmanXML.png)
+![All Products by XML](screenshots/PostmanXML.png)
+![All Products by JSON](screenshots/PostmanJSON.png)
+![XML by Product ID](screenshots/PostmanIDXML.png)
+![JSON by Product ID](screenshots/PostmanIDJSON.png)
