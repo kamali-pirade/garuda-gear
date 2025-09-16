@@ -18,7 +18,7 @@ def show_main(request):
 
 def add_product(request):
     form = ProductForm(request.POST or None)
-
+    
     if form.is_valid() and request.method == "POST":
         form.save()
         return redirect('main:show_main')

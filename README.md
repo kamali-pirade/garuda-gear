@@ -1,14 +1,6 @@
 # Tugas 2 PBP: Garuda Gear
 
-<<<<<<< HEAD
 Nama : Lessyarta Kamali Sopamena Pirade
-=======
-Nama: Lessyarta Kamali Sopamena Pirade
-
-NPM: 2406356643
-
-Kelas: PBP C
->>>>>>> c41c600891abca760eaefccfc3f1c61fbed42336
 
 NPM : 2406356643
 
