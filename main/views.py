@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from .models import Product
 from .forms import ProductForm
 
+# testing for redeploy
+
 def show_main(request):
     products = Product.objects.all()
 
