@@ -10,7 +10,7 @@ Penjelasan shop: Garuda Gear adalah platform yang menawarkan perlengkapan sepak 
 
 Link PWS: https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id/
 
-Pertanyaan:
+Pertanyaan Tugas 2:
 
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
@@ -55,3 +55,20 @@ Pertanyaan:
 6. Apakah ada feedback untuk asisten dosen tutorial 1 yang telah kamu kerjakan sebelumnya?
 
    Tutorial 1 sangat membantu dan mudah dimengerti. Terima kasih banyak tim asisten dosen!
+
+Pertanyaan Tugas 3:
+
+1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+   
+
+2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+
+3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+
+4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat 
+dimanfaatkan oleh penyerang?
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+6. Apakah ada feedback untuk asdos di tutorial 2 yang sudah kalian kerjakan?
+   Tutorial 2 sangat jelas dan membantu dalam Tugas 3 PBP ini. Terima kasih banyak tim asisten dosen!
