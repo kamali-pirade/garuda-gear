@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core import serializers
 from django.http import HttpResponse
@@ -60,15 +59,3 @@ def show_json_by_id(request, news_id):
         return HttpResponse(json_data, content_type="application/json")
     except Product.DoesNotExist:
         return HttpResponse(status=404)
-=======
-from django.shortcuts import render
-
-def show_main(request):
-    context = {
-        'app_name' : 'Garuda Gear',
-        'name': 'Lessyarta Kamali Sopamena Pirade',
-        'class': 'PBP C'
-    }
-
-    return render(request, "main.html", context)
->>>>>>> c41c600891abca760eaefccfc3f1c61fbed42336
