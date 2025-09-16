@@ -33,10 +33,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "lessyarta-kamali-garudagear.pbp.cs.ui.ac.id"]
 
+<<<<<<< HEAD
 CSRF_TRUSTED_ORIGINS = [
     "https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id"
 ]
 
+=======
+>>>>>>> c41c600891abca760eaefccfc3f1c61fbed42336
 # Application definition
 
 INSTALLED_APPS = [
@@ -64,7 +67,11 @@ ROOT_URLCONF = 'garuda_gear.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+<<<<<<< HEAD
         'DIRS': [BASE_DIR / 'templates'],
+=======
+        'DIRS': [],
+>>>>>>> c41c600891abca760eaefccfc3f1c61fbed42336
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
