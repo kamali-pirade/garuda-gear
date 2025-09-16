@@ -16,7 +16,7 @@ Kelas : PBP C
 
 Penjelasan shop: Garuda Gear adalah platform yang menawarkan perlengkapan sepak bola yang sepenuhnya diproduksi dan dibuat di Indonesia.
 
-Link PWS: https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id/
+Link PWS: https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id
 
 Pertanyaan Tugas 2:
 
@@ -67,7 +67,7 @@ Pertanyaan Tugas 2:
 Pertanyaan Tugas 3:
 
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
-   
+
 
 2. Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
 
