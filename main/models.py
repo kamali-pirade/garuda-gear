@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 class Product(models.Model):
     CATEGORY_CHOICES = [
@@ -18,6 +19,7 @@ class Product(models.Model):
     thumbnail = models.URLField(null=True, blank=True)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
     is_featured = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     # Fitur tambahan untuk Garuda Gear
     stock = models.IntegerField()

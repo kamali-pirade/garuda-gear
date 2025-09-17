@@ -16,10 +16,10 @@
 <br /><br />
 {% endif %}
 
-<p>{{ product.description }}</p>
-
-<p>
-    <b>Price: Rp{{ product.price }}</b> <br>
-</p>
+{% if product.user %}
+    <p>Seller: {{ product.user.username }}</p>
+{% else %}
+    <p>Seller: Anonymous</p>
+{% endif %}
 
 {% endblock content %}

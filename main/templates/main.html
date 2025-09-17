@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<h1>Welcome to {{ app_name }}!</h1>
+<h1>Welcome to {{ app_name }}, {{ username }}!</h1>
 
 <h5>Made by:</h5>
 <p>{{ name }}</p>
@@ -10,6 +10,19 @@
 <a href="{% url 'main:add_product' %}">
   <button>+ Add Product</button>
 </a>
+
+<a href="{% url 'main:logout' %}">
+  <button>Logout</button>
+</a>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
+<a href="?filter=all">
+  <button type="button">All Products</button>
+</a>
+<a href="?filter=my">
+  <button type="button">My Products</button>
+</a> 
 
 <hr />
 
@@ -28,12 +41,7 @@
   </p>
 
   {% if product.thumbnail %}
-  <a href="{% url 'main:show_product' product.id %}"
-    ><img
-      src="y{{ product.thumbnail.url }}"
-      alt="{{ product.name }}"
-      width="200"
-  /></a>
+  <img src="{{ product.thumbnail }}" alt="{{ product.name }}" width="300" />
   <br /><br />
   {% endif %}
 
