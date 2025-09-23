@@ -1,4 +1,4 @@
-# Tugas 2 PBP: Garuda Gear
+# Garuda Gear
 
 Nama : Lessyarta Kamali Sopamena Pirade
 
@@ -10,7 +10,7 @@ Penjelasan shop: Garuda Gear adalah platform yang menawarkan perlengkapan sepak 
 
 Link PWS: https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id
 
-Pertanyaan Tugas 2:
+## Pertanyaan Tugas 2:
 
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 
@@ -56,10 +56,10 @@ Pertanyaan Tugas 2:
 
    Tutorial 1 sangat membantu dan mudah dimengerti. Terima kasih banyak tim asisten dosen!
 
-Pertanyaan Tugas 3:
+## Pertanyaan Tugas 3:
 
 1. Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
-   Data delivery sangat penting karena sebuah platform dinamis perlu mengirimkan data dari satu stack ke stack lainnya. Dalam kasus Garuda Gear, ini berarti mengirimkan data dari backend (server Django dan database) ke frontend (browser pengguna). Tanpa data delivery, Garuda Gear yang saya bangun hanya akan menjadi halaman HTML statis.
+   Data delivery sangat penting karena sebuah platform dinamis perlu mengirimkan data dari satu stack ke stack lainnya. Dalam kasus Garuda Gear, ini berarti mengirimkan data dari backend (server Django dan database) ke frontend (browser user). Tanpa data delivery, Garuda Gear yang saya bangun hanya akan menjadi halaman HTML statis.
    Dengan data delivery, garuda gear dapat:
    1) Menampilkan katalog produk yang dijual, di mana saya menggunakan data delivery dalam format HTML untuk mengirimkan daftar produk dari database ke template main.html.
    2) Menyediakan data untuk platform lain, di mana saya  mengimplementasikan endpoint yang mengembalikan data dalam format XML dan JSON.
@@ -68,7 +68,7 @@ Pertanyaan Tugas 3:
    Menurut saya, JSON lebih baik dan lebih modern untuk pengembangan web. Hal ini karena tampilan data di JSON lebih ringkas dan mudah saya baca. JSON lebih populer dibandingkan XML. Hal ini karena meskipun sintaks JSON berasal dari objek JavaScript dan JavaScript adalah bahasa dominan untuk frontend web. Hal ini membuat proses pengolahan data JSON di browser menjadi lebih natural. XML juga memerlukan proses parsing yang lebih rumit.
 
 3. Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
-   Method is_valid() berfungsi sebagai lapisan validasi data. Sebelum data yang dikirim pengguna dari form diizinkan untuk disimpan ke database, method is_valid() akan memeriksa apakah semua input sesuai dengan aturan yang ada di ProductForm dan Product model.
+   Method is_valid() berfungsi sebagai lapisan validasi data. Sebelum data yang dikirim user dari form diizinkan untuk disimpan ke database, method is_valid() akan memeriksa apakah semua input sesuai dengan aturan yang ada di ProductForm dan Product model.
    Misalnya, semua field wajib sudah terisi dan semua tipe data sudah benar.
 
 4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat 
@@ -81,7 +81,7 @@ dimanfaatkan oleh penyerang?
    3) Webite tersebut memiliki kode yang secara diam-diam mengirimkan request POST ke URL tambah produk di aplikasi saya.
    4) Karena saya masih login, request jahat tersebut akan membawa cookie sesi saya yang valid.
    5) Tanpa csrf_token, server saya akan menganggap request tersebut sah dan akan memprosesnya (misalnya, menambahkan produk spam ke katalog saya) tanpa saya sadari.
-   Jika saya mempunyai csrf_token, setiap request POST dari browser pengguna harus menyertakan token unik yang cocok dengan yang ada di server. Penyerang tidak akan memiliki token ini, sehingga request dari penyerang akan ditolak dan serangan gagal.
+   Jika saya mempunyai csrf_token, setiap request POST dari browser user harus menyertakan token unik yang cocok dengan yang ada di server. Penyerang tidak akan memiliki token ini, sehingga request dari penyerang akan ditolak dan serangan gagal.
 
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
    
@@ -110,15 +110,91 @@ Screenshot Postman:
 ![XML by Product ID](screenshots/PostmanIDXML.png)
 ![JSON by Product ID](screenshots/PostmanIDJSON.png)
 
-Pertanyaan Tugas 4:
+## Pertanyaan Tugas 4:
 
 1. Apa itu Django AuthenticationForm? Jelaskan juga kelebihan dan kekurangannya.
+  
+   Django AuthenticationForm adalah sebuah form bawaan dari Django yang dirancang untuk memverifikasi identitas user saat login. Form ini memiliki 2 field utama: username dan password. Tugas utamanya adalah mengambil input dari user, lalu memeriksa ke database apakah ada user dengan kombinasi username dan password tersebut yang aktif. 
+   
+   Kelebihan:
+   - AuthenticationForm dilengkapi dengan mekanisme keamanan bawaan Django yang tidak hanya mencocokkan username dan password, tetapi juga memastikan password yang dimasukkan di-hash dengan benar sebelum dibandingkan dengan hash di database, serta memeriksa status user (apakah akun aktif atau tidak) sebelum mengizinkan login. 
+   - Form memvalidasi input dengan memastikan kedua field terisi dan memberikan pesan error jika input salah.
+   
+   Kekurangan:
+   - Form hanya menerima username. Jika ingin login dengan alamat email, harus membuat class form baru yang inherit dari AuthenticationForm.
+   - Tampilan yang dihasilkan sangat standar. Jika ingin mendapatkan tampilan sesuai keinginan, harus me-render setiap field secara manual di dalam HTML dan menatanya dengan CSS.
 
+2. Apa perbedaan antara autentikasi dan otorisasi? Bagaimana Django mengimplementasikan kedua konsep tersebut?
 
-2. Apa perbedaan antara autentikasi dan otorisasi? Bagaiamana Django mengimplementasikan kedua konsep tersebut?
+   Perbedaan:
+   - Autentikasi: Proses verifikasi user. Contohnya adalah saat memasukkan username dan password. Jika input user cocok dengan data di database, sistem berhasil mengautentikasi user.
+   - Otorisasi: Proses menentukan hak akses atau izin yang dimiliki oleh user yang sudah terautentikasi. Contohnya adalah ketika ada admin dan user biasa yang sama-sama berhasil log in, namun hanya admin yang dapat menghapus data, sedangkan user biasa tidak.
+
+   Implementasi di Django:
+   - Autentikasi: 
+   1) Django menyediakan model User bawaan yang memiliki field esensial seperti username, password (disimpan dalam bentuk hash), email, first_name, dan last_name.
+   2) Django menyediakan fungsi seperti authenticate() untuk memeriksa kredensial user dan login() untuk membuat sesi bagi user yang berhasil diautentikasi.
+   3) Django juga menyediakan form seperti AuthenticationForm dan UserCreationForm untuk mempermudah proses login dan registrasi.
+
+   - Otorisasi:
+   1) Menggunakan decorator @login_required adalah cara paling sederhana untuk otorisasi. Decorator ini digunakan pada sebuah view untuk memeriksa apakah seorang user sudah terautentikasi atau belum. Jika belum, akses ke halaman tersebut akan ditolak dan user akan diarahkan ke halaman login. 
+   2) Django memiliki sistem izin yang lebih canggih. Kita bisa menentukan izin spesifik untuk model tertentu dan memberikannya kepada user atau grup.
+   3) Model User bawaan Django memiliki flag seperti is_staff atau is_superuser yang bisa digunakan untuk memberikan hak akses khusus. Misalnya, hanya user dengan is_staff=True yang dapat mengakses halaman admin Django.
 
 3. Apa saja kelebihan dan kekurangan session dan cookies dalam konteks menyimpan state di aplikasi web?
 
+   Cookies:
+   - Kelebihan:
+   1) Data disimpan di browser user, sehingga tidak membebani penyimpanan di server.
+   2) Cookies dapat diatur agar memiliki masa kedaluwarsa yang panjang, sehingga tetap ada bahkan ketika browser ditutup.
+   - Kekurangan:
+   1) Data cookies disimpan sebagai teks biasa di komputer, sehingga siapapun yang mengakses komputer tersebut dapat melihatnya.
+   2) Kapasitas penyimpanan cookies sangat kecil (sekitar 4 KB), sehingga tidak cocok untuk menyimpan data yang besar.
+   3) User dapat mematikan fitur cookies di browser, sehingga aplikasi tidak berfungsi dengan benar.
+
+   Session:
+   - Kelebihan:
+   1) Data session disimpan di sisi server. Browser client hanya menyimpan Session ID (sebuah token acak) di dalam cookie. Ini jauh lebih aman karena data sensitif tidak pernah meninggalkan server.
+   2) Ukuran tidak dibatasi oleh limit 4 KB seperti cookies.
+   - Kekurangan:
+   1) Setiap sesi user aktif akan memakan memori di server. Jika ada ribuan user yang aktif bersamaan, ini dapat mnejadi beban.
+   2) Mekanisme session masih membutuhkan cookie untuk menyimpan Session ID di client. Jika cookies dimatikan, session juga tidak akan berfungsi.
+
 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai? Bagaimana Django menangani hal tersebut?
+   
+   Tidak, penggunaan cookies tidak aman secara default. Cookie pada dasarnya adalah file teks yang disimpan di komputer user, sehingga rentan untuk dibaca atau dimanipulasi.
+
+   Risiko potensial yang harus diwaspadai:
+
+   - Pencurian sesi: Jika seorang penyerang berhasil mendapatkan cookie sesi (misalnya, sessionid Django), mereka dapat menggunakannya untuk meniru user dan masuk ke akun mereka tanpa memerlukan password.
+   - Cross-Site Scripting (XSS), di mana penyerang dapat menyuntikkan skrip berbahaya ke dalam situs web. Jika tidak ditangani dengan benar, skrip ini dapat dieksekusi oleh browser user lain dan digunakan untuk mencuri cookies mereka.
+   - Cross-Site Request Forgery (CSRF), yaitu serangan di mana penyerang menipu user yang sudah login untuk tanpa sadar mengirimkan request berbahaya ke aplikasi web. Misalnya, membuat user tanpa sadar mentransfer uang atau mengubah kata sandi mereka.
+   
+   Bagaimana Django Menanganinya:
+   
+   Django dirancang dengan prinsip "secure by default" dan menyediakan beberapa lapisan perlindungan yang kuat untuk mengatasi risiko-risiko ini.
+
+   1) Django tidak menyimpan data sensitif di dalam cookie, hanya menyimpan sebuah sessionid acak. Data sesi yang sebenarnya disimpan dengan aman di database server.
+   2) Untuk setiap form yang menggunakan metode POST, Django mewajibkan adanya {% csrf_token %}. Token ini adalah nilai rahasia unik yang dihasilkan untuk setiap sesi user. Saat form dikirim, Django memverifikasi token ini. Jika token tidak ada atau tidak cocok, request akan ditolak. Ini secara efektif mencegah serangan CSRF.
+   3) Django secara otomatis mengamankan halaman web dengan melakukan escaping atau menetralkan karakter-karakter HTML khusus dari variabel yang akan ditampilkan. Ini berarti, jika seorang user mencoba memasukkan kode JavaScript berbahaya ke dalam sebuah field, simbol-simbol pemicu kode seperti < dan > akan diubah menjadi teks biasa yang tidak berbahaya. Hasilnya, kode tersebut hanya akan ditampilkan sebagai tulisan di layar dan tidak akan dieksekusi oleh browser, sehingga melindungi dari serangan XSS.
+   4) Flag pengaman cookie:
+   - HttpOnly: Django secara default mengatur cookie sessionid dengan flag HttpOnly. Flag ini memberitahu browser untuk tidak mengizinkan JavaScript mengakses cookie tersebut, sehingga sangat efektif memitigasi risiko pencurian cookie melalui serangan XSS.
+   - Secure: Jika aplikasi berjalan di atas HTTPS, Django dapat dikonfigurasi dengan SESSION_COOKIE_SECURE = True  untuk menambahkan flag Secure pada cookies. Ini memastikan browser hanya akan mengirim cookie melalui koneksi yang terenkripsi.
 
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+   Pertama, saya membuat sistem registrasi user dengan menambahkan import UserCreationForm dan messages di file views.py untuk membuat formulir pendaftaran user di aplikasi web dengan mudah. Lalu, saya menambahkan function register di file tersebut untuk menghasilkan formulir registrasi dan membuat akun user baru ketika data sudah diisi dan di-submit oleh user.
+   
+   Kemudian, saya membuat file register.html untuk membuat tampilan form registrasi. Saya juga menambahkan {% csrf_token %} untuk keamanan. Saya menambahkan path /register/ di urls.py untuk registrasi agar aplikasi Django tahu fungsi view mana yang harus dijalankan ketika seorang user mengunjungi URL tersebut.
+   
+   Setelah itu, saya membuat fungsi login dan logout dengan menambahkan import authenticate, login, AuthenticationForm, dan logout. Langkah selanjutnya mirip dengan langkah pembuatan form registrasi sebelumnya yaitu dengan membuat function login_user dan logout_user di views.py, serta login.html dan menambahkan button untuk logout di main.html.
+   
+   Ketika akun user sudah di-register, user dapat melakukan login di halaman login. Ketika ingin logout, user dapat menekan button logout.
+   
+   Langkah selanjutnya adalah menambahkan import decorator login_required pada views.py dan mengaplikasikannya untuk fungsi show_main dan show_product agar hanya dapat diakses oleh user yang sudah login (terautentikasi). Hal ini saya lakukan untuk memastikan bahwa hanya user yang sudah login yang dapat mengakses halaman tertentu (otorisasi).
+
+   Saya juga menyimpan cookie saat login di function login_user dengan menggunakan response.set_cookie('last_login', ...) dan mengambil data cookie di show_main pada views.py menggunakan request.COOKIES.get('last_login', 'Never') dan memasukkannya ke dalam context. Kemudian di main.html, saya menampilkannya dengan {{ last_login }}. Saat logout, cookie akan terhapus karena di function logout_user saya memanggil response.delete_cookie('last_login').
+   
+   Di models.py, saya menambahkan sebuah field ForeignKey ke model Product yang merujuk ke model User bawaan Django. Ini menciptakan hubungan many-to-one (banyak produk dimiliki oleh satu user). Di function add_product pada views.py, saya menggunakan form.save(commit=False) agar objek dibuat di memori tanpa disimpan ke database. Ini memberi saya waktu untuk mengatur product.user = request.user sebelum akhirnya memanggil product.save().
+
+   Terakhir, saya menambahkan tombol filter My dan All pada halaman main.html untuk melihat produk yang saya jual sebagai penjual dan semua produk yang dijual oleh semua penjual yang terdaftar di aplikasi Garuda Gear.
