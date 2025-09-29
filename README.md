@@ -71,8 +71,8 @@ Link PWS: https://lessyarta-kamali-garudagear.pbp.cs.ui.ac.id
    Method is_valid() berfungsi sebagai lapisan validasi data. Sebelum data yang dikirim user dari form diizinkan untuk disimpan ke database, method is_valid() akan memeriksa apakah semua input sesuai dengan aturan yang ada di ProductForm dan Product model.
    Misalnya, semua field wajib sudah terisi dan semua tipe data sudah benar.
 
-4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat 
-dimanfaatkan oleh penyerang?
+4. Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+
    csrf_token adalah token yang berfungsi sebagai security. Token ini di-generate secara otomatis oleh Django untuk mencegah serangan berbahaya. 
    Jika saya tidak menambahkan csrf_token pada form tambah produk di Garuda Gear, maka form saya akan rentan terhadap serangan Cross-Site Request Forgery (CSRF). 
    Skenario yang dapat dimanfaatkan oleh penyerang:
@@ -198,3 +198,122 @@ Screenshot Postman:
    Di models.py, saya menambahkan sebuah field ForeignKey ke model Product yang merujuk ke model User bawaan Django. Ini menciptakan hubungan many-to-one (banyak produk dimiliki oleh satu user). Di function add_product pada views.py, saya menggunakan form.save(commit=False) agar objek dibuat di memori tanpa disimpan ke database. Ini memberi saya waktu untuk mengatur product.user = request.user sebelum akhirnya memanggil product.save().
 
    Terakhir, saya menambahkan tombol filter My dan All pada halaman main.html untuk melihat produk yang saya jual sebagai penjual dan semua produk yang dijual oleh semua penjual yang terdaftar di aplikasi Garuda Gear.
+
+## Pertanyaan Tugas 5:
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+   Urutan:
+   1) Inline Style = ditulis langsung dalam HTML. Contoh: h1 style="color: pink;"
+   2) ID Selector = menggunakan atribut id. Contoh: #navbar
+   3) Class Selector = menggunakan class atau pseudo-class. Contoh: .test, :hover
+   4) Attribute Selector = menggunakan atribut. Contoh: [type="text"]
+   5) Element Selector = hanya berdasarkan nama elemen. Contoh: h1, p, div
+
+   Aturan tambahan:
+   - Jika ada 2 aturan dengan spesifitas yang sama, aturan terakhir yang ditulis akan menang
+   
+   Contoh:
+   
+   h1 {background-color: yellow;}
+   
+   h1 {background-color: red;}
+   
+   Tampilan: background-color akan red.
+   
+   - Selector ID lebih kuat dibanding selector atribut
+   
+   div#myDiv {background-color: green;}
+   
+   #myDiv {background-color: yellow;}
+   
+   div[id=myDiv] {background-color: blue;}
+   
+   Tampilan: hasil background-color akan green karena lebih spesifik.
+   
+   - Class selector lebih kuat daripada banyak element selector
+   
+   Contoh: 
+   
+   .intro {background-color: yellow;}
+   
+   h1 {background-color: red;}
+   
+   Tampilan: background-color: yellow, karena class lebih spesifik.
+   
+   - Selector universal (*) dan nilai yang diwarisi tidak mempengaruhi spesifisitas
+   
+   Contoh: * {background-color: yellow;}
+   
+   h1 {background-color: red;}
+   
+   Tampilan: background-color: red; karena element selector (h1) lebih spesifik daripada *.
+
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design, serta jelaskan mengapa!
+   
+   Responsive design menjadi konsep yang penting dalam pengembangan aplikasi web karena bertujuan agar tampilan sebuah web dapat terlihat baik dan fungsional di semua jenis perangkat, mulai dari desktop dengan layar lebar, tablet, hingga smartphone dengan layar kecil. Sebuah aplikasi web harus bisa beradaptasi untuk memberi pengalaman user (UX) yang konsisten dan nyaman. 
+   
+   Contoh aplikasi yang sudah menerapkan responsive design:
+   - Website PBP: https://pbp-fasilkom-ui.github.io/ganjil-2026. Ketika mencoba toggle device mode (Ctrl + Shift + I lalu Ctrl + Shift + M), layar otomatis berubah menjadi tampilan lebih kecil, namun tampilan menyesuaikan dengan lebar layar.
+   
+   Contoh aplikasi yang belum menerapkan responsive design:
+   - Space Jam: https://www.spacejam.com/1996/. Ketika mencoba toggle device mode, layar semakin kecil namun tampilan tetap sama sehingga user perlu melakukan zoom untuk melihat tampilan.
+
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+   Margin, border, dan padding adalah bagian dari CSS Box Model.
+   
+   Perbedaan:
+   - Margin: mengosongkan area di sekitar border (transparan)
+   - Border: garis tepian yang membungkus konten dan padding-nya
+   - Padding: mengosongkan area di sekitar konten (transparan)
+
+   Cara implementasi di CSS:
+   
+   .card-yay {
+      
+         /* padding 20px di semua sisi (atas, kanan, bawah, kiri) */
+         
+         padding: 20px;
+         
+         /* border solid setebal 1px dengan warna abu-abu */
+         
+         border: 1px solid #cccccc;
+
+         
+         /* margin 15px di semua sisi untuk memberi jarak dengan elemen lain */
+         
+         margin: 15px;
+
+   }
+
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+   1) Flexbox:
+   Digunakan untuk mengatur tata letak elemen dalam satu dimensi (baik secara horizontal dalam satu baris, atau vertikal dalam satu kolom). Digunakan untuk komponen seperti navbar atau item kartu yang berjajar.
+   
+   Implementasi di Tugas 5: 
+   
+   Pada navbar.html, kelas flex, items-center, dan justify-between digunakan.
+   - flex: Mengaktifkan layout Flexbox.
+   - items-center: Menyejajarkan item secara vertikal di tengah.
+   - justify-between: Memberi jarak merata antar item (logo di kiri, menu di tengah, tombol login di kanan).
+   
+   2) Grid layout:
+   Digunakan untuk mengatur tata letak elemen dalam dua dimensi (baris dan kolom). Mirip seperti tabel atau spreadsheet.
+   
+   Implementasi di Tugas 5: 
+   
+   Pada main.html, kelas grid, grid-cols-1, md:grid-cols-2, dan lg:grid-cols-3 digunakan untuk menampilkan daftar berita.
+   - grid: Mengaktifkan layout Grid.
+   - grid-cols-1: Secara default (di layar kecil), berita ditampilkan dalam 1 kolom.
+   - md:grid-cols-2: Pada layar ukuran medium (medium), tata letaknya berubah menjadi 2 kolom.
+   - lg:grid-cols-3: Pada layar besar (large), tata letaknya menjadi 3 kolom.
+
+5.  Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+      Pertama, saya menambahkan Tailwind ke aplikasi. Lalu mengimplementasikan fitur Edit Product dan Delete Product, di mana masing-masing mempunyai function di views.py. Kemudian, saya membuat navigation bar yang berisi nama toko, home, add product, about us, username, dan logout button.
+
+      Saya mengkonfigurasi Static Files pada aplikasi dan menambahkan global.css, di mana saya memilih warna-warna dasar dari web saya. Saya menghubungkan file global.css dengan base.html dan menambahkan font Poppins pada base.html ini.
+
+      Setelah itu, saya melakukan styling untuk main.html, navbar.html, edit_product.html, register.html, login.html, product_detail.html. Agar produk nyaman dilihat, saya menambahkan card_product.html yang menampilkan produk dalam bentuk kartu. Kartu ini dirancang dengan rasio 3:4 untuk thumbnail dan menampilkan informasi seperti nama, harga, dan kategori. Pada setiap kartu, saya mengimplementasikan efek "pop" agar lebih interaktif. Saat pengguna mengarahkan kursor ke sebuah kartu, kartu tersebut akan sedikit membesar (hover:scale-105) dan menampilkan bayangan (hover:shadow-xl). Awalnya, efek bayangan terpotong karena adanya kelas overflow-hidden pada elemen pembungkus. Kartu juga saya bentuk dengan rounded edge.
+      
+      Saya juga menambahkan about.html yang menampilkan informasi mengenai Garuda Gear. about.html ini dapat diakses melalui navigation bar.
+
+      Terakhir, saya mengimplementasikan sistem Pagination. Di views.py, saya menggunakan Paginator bawaan Django untuk membagi daftar produk menjadi beberapa halaman, dengan masing-masing halaman menampilkan maksimal 9 produk. Di main.html, saya menambahkan komponen navigasi halaman yang dinamis. Komponen ini secara otomatis menampilkan nomor halaman yang benar, menonaktifkan tombol "Previous" atau "Next" jika tidak diperlukan, dan menunjukkan nomor halaman yang sedang aktif.

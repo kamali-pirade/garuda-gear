@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+<!-- include navigation bar di about.html -->
+{% block meta %} {% include 'navbar.html' %}
+<title>About Us - Garuda Gear</title>
+{% endblock meta %}
+
+{% block content %}
+<div class="bg-gray-50">
+
+  <!-- introduction -->
+  <div class="py-20 sm:py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold text-[#4B40B5] tracking-tight">
+        Fueling Your Passion for the Game
+      </h1>
+      <p class="mt-6 text-lg text-gray-600 max-w-3xl mx-auto">
+        Garuda Gear isn't just a store; it's a celebration of football. We provide athletes of all levels with the highest quality gear to elevate their performance and ignite their passion on and off the pitch.
+      </p>
+    </div>
+  </div>
+
+  <!-- mission -->
+  <div class="py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-900">Our Mission & Story</h2>
+        <div class="mt-4 w-24 h-1 bg-[#4B40B5] mx-auto rounded-full"></div>
+        <p class="mt-6 text-md text-gray-600 max-w-2xl mx-auto">
+          Born from a lifelong love for football, we saw a need for a dedicated hub where players could find not just equipment, but expertise and a shared passion. Garuda Gear was founded on a simple principle: to provide every player, from the local park to the competitive pitch, with access to world-class gear and unparalleled service.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- core values -->
+  <div class="bg-white py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold text-gray-900">Why Choose Garuda Gear?</h2>
+        <p class="mt-4 text-md text-gray-600">We are committed to excellence in everything we do.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <!-- value 1: quality -->
+        <div class="group transform transition-transform duration-300 hover:scale-105 hover:shadow-xl p-6 rounded-lg">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-[#4B40B5] text-white transition-colors duration-300 group-hover:bg-[#859092]">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-900">Uncompromising Quality</h3>
+          <p class="mt-2 text-gray-600">
+            We handpick every item in our collection, ensuring they meet the highest standards of performance and durability.
+          </p>
+        </div>
+        <!-- value 2: expertise -->
+        <div class="group transform transition-transform duration-300 hover:scale-105 hover:shadow-xl p-6 rounded-lg">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-[#4B40B5] text-white transition-colors duration-300 group-hover:bg-[#859092]">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-900">100% Original</h3>
+          <p class="mt-2 text-gray-600">
+            Our team lives and breathes football. We're here to offer original and professional gear.
+          </p>
+        </div>
+        <!-- value 3: community -->
+        <div class="group transform transition-transform duration-300 hover:scale-105 hover:shadow-xl p-6 rounded-lg">
+          <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-[#4B40B5] text-white transition-colors duration-300 group-hover:bg-[#859092]">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
+          <h3 class="mt-6 text-xl font-semibold text-gray-900">More Than a Store</h3>
+          <p class="mt-2 text-gray-600">
+            We believe in the power of football to unite people and create a strong community for players and fans.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- cta -->
+  <div class="bg-gray-50 py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold text-gray-900">Ready to Elevate Your Game?</h2>
+      <p class="mt-4 text-lg text-gray-600">
+        Explore our curated collection of football gear and find exactly what you need to succeed.
+      </p>
+      <div class="mt-8">
+        <a href="{% url 'main:show_main' %}" class="inline-block bg-[#4B40B5] text-white font-medium py-3 px-8 rounded-md hover:bg-[#859092] transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+          Shop All Products
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

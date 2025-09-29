@@ -13,6 +13,8 @@ import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
+from django.core.paginator import Paginator # paginatior bawaan django
+
 @login_required(login_url='/login')
 def show_main(request):
     filter_type = request.GET.get("filter", "all")
@@ -22,15 +24,18 @@ def show_main(request):
     else:
         products = Product.objects.filter(user=request.user)
 
+    paginator = Paginator(products, 9)  # 9 products per halaman
+    page_number = request.GET.get('page')
+    products = paginator.get_page(page_number) # paginated products
+
     context = {
         'app_name' : 'Garuda Gear',
         'name': 'Lessyarta Kamali Sopamena Pirade',
         'username': request.user.username,
         'class': 'PBP C',
         'products': products,
-        'last_login': request.COOKIES.get('last_login', 'Never')
+        'last_login': request.COOKIES.get('last_login', 'Never'),
     }
-
     return render(request, "main.html", context)
 
 def add_product(request):
@@ -116,3 +121,32 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+# edit product
+def edit_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == 'POST':
+        form.save()
+        return redirect('main:show_main')
+
+    context = {
+        'form': form
+    }
+
+    return render(request, "edit_product.html", context)
+
+# hapus product
+def delete_product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+# masuk about page
+def about(request):
+    context = {
+        'app_name' : 'Garuda Gear',
+        'username': request.user.username,
+    }
+    return render(request, "about.html", context)
+

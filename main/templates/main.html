@@ -1,57 +1,110 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Welcome to {{ app_name }}, {{ username }}!</h1>
+{% extends 'base.html' %}
+{% load static %}
 
-<h5>Made by:</h5>
-<p>{{ name }}</p>
+{% block meta %}
+<title>Garuda Gear</title>
+{% endblock meta %}
 
-<h5>Class:</h5>
-<p>{{ class }}</p>
+{% block content %}
+{% include 'navbar.html' %}
+<div class="bg-gray-50 w-full pt-16 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-<a href="{% url 'main:add_product' %}">
-  <button>+ Add Product</button>
-</a>
+    <!-- Header Section -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest Products</h1>
+      <p class="text-gray-600">Stay updated with the latest football products</p>
+    </div>
 
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
+    <!-- Filter Section -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4">
+      <div class="flex space-x-3 mb-4 sm:mb-0">
+        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-[#4B40B5] text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#4B40B5] hover:text-white">
+          All Products
+        </a>
+        <a href="?filter=my" class="{% if request.GET.filter == 'my' %} bg-[#4B40B5] text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#4B40B5] hover:text-white">
+          My Products
+        </a>
+      </div>
+      {% if user.is_authenticated %}
+        <div class="text-sm text-gray-500">
+          Last login: {{ last_login }}
+        </div>
+      {% endif %}
+    </div>
 
-<h5>Sesi terakhir login: {{ last_login }}</h5>
+    <!-- Products Grid -->
+    {% if not products %}
+      <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
+        <div class="w-32 h-32 mx-auto mb-4">
+          <img src="{% static 'image/no-products.png' %}" alt="No products available" class="w-full h-full object-contain">
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+        <p class="text-gray-500 mb-6">Be the first to share football products with the community.</p>
+        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-[#4B40B5] text-white rounded-md hover:bg-[#4B40B5]-700 transition-colors">
+          Add Product
+        </a>
+      </div>
+    {% else %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for product in products %}
+          {% include 'card_product.html' with product=product %}
+        {% endfor %}
+      </div>
+    {% endif %}
 
-<a href="?filter=all">
-  <button type="button">All Products</button>
-</a>
-<a href="?filter=my">
-  <button type="button">My Products</button>
-</a> 
-
-<hr />
-
-{% if not products %}
-<p>No products available.</p>
-{% else %} {% for product in products %}
-<div>
-  <h2>
-    <a href="{% url 'main:show_product' product.id %}">{{ product.name }}</a>
-  </h2>
-
-  <p>
-    <b>{{ product.get_category_display }}</b> | Brand: {{ product.brand }} |
-    Stok: {{ product.stock }} {% if product.is_featured %} |
-    <b>BESTSELLER</b>{% endif %}
-  </p>
-
-  {% if product.thumbnail %}
-  <img src="{{ product.thumbnail }}" alt="{{ product.name }}" width="300" />
-  <br /><br />
-  {% endif %}
-
-  <p>{{ product.description|truncatewords:25 }}</p>
-
-  <p>
-    <b>Price: Rp{{ product.price }}</b> <br /><br />
-    <a href="{% url 'main:show_product' product.id %}"><button>Show details</button></a
-    >
-  </p>
+    <!-- pagination -->
+    <div class="flex justify-center mt-12 mb-8">
+      <nav aria-label="Page navigation">
+        <ul class="flex items-center -space-x-px h-10 text-base">
+          
+          <!-- previous -->
+          {% if products.has_previous %} <!-- prev muncul kalo ada halaman sebelumnya -->
+            <li>
+              <a href="?page={{ products.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
+                <span class="sr-only">Previous</span>
+                <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+                </svg>
+              </a>
+            </li>
+          {% endif %}
+    
+          <!-- halaman -->
+          {% for page_num in products.paginator.page_range %} <!-- loop nomor halaman -->
+            {% if products.number == page_num %}
+              <!-- halaman sekarang -->
+              <li>
+                <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-white border border-[#4B40B5] bg-[#4B40B5] hover:bg-[#859092] hover:text-white">
+                  {{ page_num }}
+                </a>
+              </li>
+            {% else %}
+              <!-- halaman lain -->
+              <li>
+                <!-- kalau di filter MY atau ALL juga tetep ada paginationnya -->
+                <a href="?page={{ page_num }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                  {{ page_num }}
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+    
+          <!-- next -->
+          {% if products.has_next %} <!-- next muncul kalo ada halaman selanjutnya -->
+            <li>
+              <a href="?page={{ products.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
+                <span class="sr-only">Next</span>
+                <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                </svg>
+              </a>
+            </li>
+          {% endif %}
+          
+        </ul>
+      </nav>
+    </div>
+  </div>
 </div>
-<hr />
-{% endfor %} {% endif %} {% endblock content %}
+{% endblock content %}
