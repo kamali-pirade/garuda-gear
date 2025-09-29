@@ -317,4 +317,3 @@ Screenshot Postman:
       Saya juga menambahkan about.html yang menampilkan informasi mengenai Garuda Gear. about.html ini dapat diakses melalui navigation bar.
 
       Terakhir, saya mengimplementasikan sistem Pagination. Di views.py, saya menggunakan Paginator bawaan Django untuk membagi daftar produk menjadi beberapa halaman, dengan masing-masing halaman menampilkan maksimal 9 produk. Di main.html, saya menambahkan komponen navigasi halaman yang dinamis. Komponen ini secara otomatis menampilkan nomor halaman yang benar, menonaktifkan tombol "Previous" atau "Next" jika tidak diperlukan, dan menunjukkan nomor halaman yang sedang aktif.
-      
