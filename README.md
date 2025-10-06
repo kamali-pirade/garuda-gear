@@ -317,4 +317,41 @@ Screenshot Postman:
       Saya juga menambahkan about.html yang menampilkan informasi mengenai Garuda Gear. about.html ini dapat diakses melalui navigation bar.
 
       Terakhir, saya mengimplementasikan sistem Pagination. Di views.py, saya menggunakan Paginator bawaan Django untuk membagi daftar produk menjadi beberapa halaman, dengan masing-masing halaman menampilkan maksimal 9 produk. Di main.html, saya menambahkan komponen navigasi halaman yang dinamis. Komponen ini secara otomatis menampilkan nomor halaman yang benar, menonaktifkan tombol "Previous" atau "Next" jika tidak diperlukan, dan menunjukkan nomor halaman yang sedang aktif.
-      
+
+## Pertanyaan Tugas 6:
+1. Apa perbedaan antara synchronous request dan asynchronous request?
+
+   Pada synchronous request, user harus menunggu ketika halaman load (click, wait, refresh).
+
+   Pada asynchronous request, user masih bisa berinteraksi dengan halaman website walaupun data sedang di-load.
+
+   Awalnya, website Garuda Gear bekerja secara synchronous. Ini berarti ketika user menghapus produk (delete product), browser akan berhenti total. Browser mengirim permintaan ke server, lalu user harus menunggu sampai server selesai menghapus produk dan mengirim kembali halaman utama yang baru untuk lanjut menggunakan website. Selama proses menunggu itu, halaman menjadi tidak responsif. 
+
+   Sekarang, setelah mengimplementasi AJAX, Garuda Gear bekerja secara asynchronous. Ketika user menghapus produk, permintaan penghapusan dikirim di latar belakang. User tidak perlu menunggu. Halaman tetap bisa di-scroll dan digunakan. Saat server selesai, ia hanya memberitahu browser bahwa sudah selesai lalu JavaScript di browser bertugas memperbarui tampilan (menghilangkan kartu produk dan menampilkan toast).
+
+2. Bagaimana AJAX bekerja di Django (alur request–response)?
+
+   Di Tugas 6 ini, alur kerja AJAX yang kita buat adalah sebagai berikut:
+
+   Pertama, user menekan tombol "Edit" pada salah satu kartu produk di halaman utama. Lalu, fungsi JavaScript showEditModal(productId) yang terpasang pada tombol tersebut dijalankan. Ini mencegah browser pindah halaman. Fungsi showEditModal kemudian melakukan fetch ke URL spesifik yang telah dibuat, misalnya /edit-product-ajax/123/. Permintaan ini dikirim secara asynchronous di latar belakang untuk mengambil data produk yang akan diedit. urls.py di sisi server mencocokkan URL /edit-product-ajax/123/ dengan view edit_product_ajax.
+   
+   View edit_product_ajax mengambil data produk dari database, mengubahnya menjadi format JSON, lalu mengirimkannya kembali sebagai JsonResponse. Fetch di frontend menerima data JSON tersebut dan menggunakannya untuk mengisi field-field di dalam form modal. Setelah selesai mengedit dan menekan "Save", fetch kembali mengirim data form ke view yang sama (tapi dengan metode POST). Setelah mendapat balasan JsonResponse yang berisi status sukses, JavaScript kemudian memanggil showToast() dan fetchProducts() untuk memperbarui daftar produk di halaman utama tanpa reload.
+
+3. Apa keuntungan menggunakan AJAX dibandingkan render biasa di Django?
+
+   - Halaman tidak pernah berhenti atau freeze. Saat data produk di-load, ada loading spinner, tapi sisa halaman seperti navbar tetap bisa digunakan. Ini lebih nyaman untuk user.
+   - Daripada server harus merender ulang seluruh HTML setiap kali user filter atau hapus produk, dengan AJAX server hanya mengirimkan data JSON yang ukurannya jauh lebih kecil. Ini menghemat bandwidth dan mempercepat waktu.
+   - User bisa menambah produk baru tanpa meninggalkan halaman utama. Alur kerja tidak terputus.
+
+4. Bagaimana cara memastikan keamanan saat menggunakan AJAX untuk fitur Login dan Register di Django?
+
+   - Dengan CSRF (Cross-Site Request Forgery) Protection. Setiap permintaan POST yang user kirim (untuk login, register, tambah produk, dll.) selalu menyertakan CSRF Token. Di Garuda Gear, saya membuat fungsi JavaScript getCookie('csrftoken') untuk mengambil token dari cookie, lalu menyertakannya dalam header permintaan fetch. Ini membuktikan kepada Django bahwa permintaan tersebut sah dan berasal dari website saya sendiri, bukan dari situs lain yang mencoba meniru aksi user.
+   - Semua data yang dikirim melalui AJAX tetap divalidasi oleh form Django di backend (UserCreationForm untuk register, ProductForm untuk produk). Jika ada data yang tidak valid (misalnya, username sudah ada), view akan mengembalikan JsonResponse yang berisi pesan error, dan JavaScript akan menampilkannya kepada user.
+   - Untuk proses otentikasi, view AJAX tetap memanggil fungsi authenticate() dan login() bawaan Django.
+
+5. Bagaimana AJAX mempengaruhi pengalaman pengguna (User Experience) pada website?
+
+   - Website terasa modern dan cepat. Menghapus produk dan melihatnya langsung hilang dari daftar, atau filter dan melihat hasilnya muncul seketika.
+   - User tidak perlu lagi menunggu halaman reload setiap kali melakukan aksi kecil. Proses seperti mengisi form yang salah tidak lagi "menghukum" pengguna dengan me-reload halaman dan mungkin mengosongkan semua field. Error muncul di tempat, dan bisa langsung diperbaiki.
+   - Jika user sedang melihat-lihat produk di halaman 3, lalu ingin menambahkan produk baru, user bisa melakukannya lewat modal dan setelah selesai tetap berada di halaman 3.
+   - Dengan kombinasi loading spinner, pesan error di form, dan notifikasi toast, user selalu tahu apa yang sedang terjadi. Jika sistem sedang bekerja, berhasil, atau error, semua  itu diberitahu secara visual.

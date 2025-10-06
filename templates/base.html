@@ -19,5 +19,9 @@
 
   <body class="{% block body_class %}font-['Poppins'] mt-19{% endblock %}">
     {% block content %} {% endblock content %}
+
+    {% include 'toast.html' %}
+    {% include 'modal_product.html' %}
+    {% include 'modal_confirm_delete.html' %}
   </body>
 </html>

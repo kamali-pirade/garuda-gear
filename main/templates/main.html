@@ -10,101 +10,175 @@
 <div class="bg-gray-50 w-full pt-16 min-h-screen">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-    <!-- Header Section -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest Products</h1>
       <p class="text-gray-600">Stay updated with the latest football products</p>
     </div>
+    
+    <div class="mb-4">
+        <button onclick="showCreateModal()" class="inline-flex items-center px-4 py-2 bg-[#4B40B5] text-white rounded-md hover:bg-[#372e8c] transition-colors font-medium">
+            Add Product
+        </button>
+    </div>
 
-    <!-- Filter Section -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 bg-white rounded-lg border border-gray-200 p-4">
-      <div class="flex space-x-3 mb-4 sm:mb-0">
-        <a href="?" class="{% if request.GET.filter == 'all' or not request.GET.filter  %} bg-[#4B40B5] text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#4B40B5] hover:text-white">
-          All Products
-        </a>
-        <a href="?filter=my" class="{% if request.GET.filter == 'my' %} bg-[#4B40B5] text-white{% else %}bg-white text-gray-700 border border-gray-300{% endif %} px-4 py-2 rounded-md font-medium transition-colors hover:bg-[#4B40B5] hover:text-white">
-          My Products
-        </a>
+      <div class="flex space-x-6 mb-4 sm:mb-0">
+        <button id="filter-all-btn" class="font-medium text-[#4B40B5] underline transition-colors">
+            All Products
+        </button>
+        <button id="filter-my-btn" class="font-medium text-gray-500 transition-colors hover:text-[#4B40B5] hover:underline">
+            My Products
+        </button>
       </div>
-      {% if user.is_authenticated %}
-        <div class="text-sm text-gray-500">
-          Last login: {{ last_login }}
-        </div>
-      {% endif %}
+      <div class="flex items-center space-x-4">
+        <button id="refresh-btn" class="text-gray-600 hover:text-[#4B40B5] transition-colors p-2 rounded-md">
+            <span class="sr-only">Refresh</span>
+        </button>
+        {% if user.is_authenticated %}
+          <div class="text-sm text-gray-500">Last login: {{ last_login }}</div>
+        {% endif %}
+      </div>
     </div>
 
-    <!-- Products Grid -->
-    {% if not products %}
-      <div class="bg-white rounded-lg border border-gray-200 p-12 text-center">
-        <div class="w-32 h-32 mx-auto mb-4">
-          <img src="{% static 'image/no-products.png' %}" alt="No products available" class="w-full h-full object-contain">
-        </div>
-        <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
-        <p class="text-gray-500 mb-6">Be the first to share football products with the community.</p>
-        <a href="{% url 'main:add_product' %}" class="inline-flex items-center px-4 py-2 bg-[#4B40B5] text-white rounded-md hover:bg-[#4B40B5]-700 transition-colors">
-          Add Product
-        </a>
-      </div>
-    {% else %}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for product in products %}
-          {% include 'card_product.html' with product=product %}
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <!-- pagination -->
-    <div class="flex justify-center mt-12 mb-8">
-      <nav aria-label="Page navigation">
-        <ul class="flex items-center -space-x-px h-10 text-base">
-          
-          <!-- previous -->
-          {% if products.has_previous %} <!-- prev muncul kalo ada halaman sebelumnya -->
-            <li>
-              <a href="?page={{ products.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
-                <span class="sr-only">Previous</span>
-                <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                </svg>
-              </a>
-            </li>
-          {% endif %}
-    
-          <!-- halaman -->
-          {% for page_num in products.paginator.page_range %} <!-- loop nomor halaman -->
-            {% if products.number == page_num %}
-              <!-- halaman sekarang -->
-              <li>
-                <a href="#" aria-current="page" class="z-10 flex items-center justify-center px-4 h-10 leading-tight text-white border border-[#4B40B5] bg-[#4B40B5] hover:bg-[#859092] hover:text-white">
-                  {{ page_num }}
-                </a>
-              </li>
-            {% else %}
-              <!-- halaman lain -->
-              <li>
-                <!-- kalau di filter MY atau ALL juga tetep ada paginationnya -->
-                <a href="?page={{ page_num }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                  {{ page_num }}
-                </a>
-              </li>
-            {% endif %}
-          {% endfor %}
-    
-          <!-- next -->
-          {% if products.has_next %} <!-- next muncul kalo ada halaman selanjutnya -->
-            <li>
-              <a href="?page={{ products.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}{% if active_filter %}&category={{ active_filter }}{% endif %}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
-                <span class="sr-only">Next</span>
-                <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                </svg>
-              </a>
-            </li>
-          {% endif %}
-          
-        </ul>
-      </nav>
+    <div id="loading-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+      <svg class="animate-spin h-8 w-8 text-[#4B40B5] inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <p class="text-gray-600 mt-3">Loading products...</p>
     </div>
+
+    <div id="error-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+        <div class="text-red-500 text-4xl mb-4">⚠️</div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">Failed to Load Products</h3>
+        <p class="text-gray-500">Something went wrong. Please try again later.</p>
+    </div>
+
+    <div id="product-grid" class="hidden"></div>
+
+    <div id="empty-state" class="bg-white rounded-lg border border-gray-200 p-12 text-center hidden">
+      <div class="w-32 h-32 mx-auto mb-4">
+        <img src="{% static 'image/no-products.png' %}" alt="No products available" class="w-full h-full object-contain">
+      </div>
+      <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+      <p class="text-gray-500 mb-6">Share your football products with the community!</p>
+    </div>
+    
+    <div id="pagination-container" class="flex justify-center mt-12 mb-8"></div>
+
   </div>
 </div>
+
+<script>
+// konfigurasi
+const GET_PRODUCTS_URL = "{% url 'main:get_products_json' %}";
+const CURRENT_USER_ID = "{{ user.id|default_if_none:'' }}";
+
+// ambil elemen HTML
+const loadingState = document.getElementById('loading-state');
+const errorState = document.getElementById('error-state');
+const emptyState = document.getElementById('empty-state');
+const productGrid = document.getElementById('product-grid'); // cards
+const paginationContainer = document.getElementById('pagination-container');
+const filterAllBtn = document.getElementById('filter-all-btn'); // all products
+const filterMyBtn = document.getElementById('filter-my-btn'); // my products
+const refreshBtn = document.getElementById('refresh-btn');
+
+let activeFilter = 'all'; // variabel untuk simpan filter yang dipilih
+let currentPage = 1; // variabel untuk simpan no. halaman saat ini
+let activeCategory = ''; // variabel untuk simpan kategori yang dipilih
+
+// functions
+function showState({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {loadingState.classList.toggle('hidden',!showLoading);errorState.classList.toggle('hidden',!showError);emptyState.classList.toggle('hidden',!showEmpty);productGrid.classList.toggle('hidden',!showGrid);if(showGrid){productGrid.className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';}}
+function updateFilterButtons() {
+  if (activeFilter === 'all') {
+      filterAllBtn.className = 'font-medium text-[#4B40B5] underline transition-colors';
+      filterMyBtn.className = 'font-medium text-gray-500 transition-colors hover:text-[#4B40B5] hover:underline';
+  } else {
+      filterAllBtn.className = 'font-medium text-gray-500 transition-colors hover:text-[#4B40B5] hover:underline';
+      filterMyBtn.className = 'font-medium text-[#4B40B5] underline transition-colors';
+  }
+}function createProductCard(product) {const article=document.createElement('article');article.className='group transform transition-transform duration-300 hover:scale-105 bg-white rounded-lg border border-gray-200 hover:shadow-xl';const detailUrl=`{% url 'main:show_product' 0 %}`.replace('0',product.id);const priceFormatted=new Intl.NumberFormat('id-ID').format(product.price);const thumbnailHtml=product.thumbnail?`<img src="${product.thumbnail}" alt="${product.name}" class="w-full h-full object-cover rounded-t-lg">`:`<div class="w-full h-full bg-gray-200 rounded-t-lg"></div>`;const featuredBadge=product.is_featured?`<span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-[#FFD668] text-yellow-800">Featured</span>`:'';let actionButtonsHtml=`<div class="pt-4 border-t border-gray-100"><a href="${detailUrl}" class="text-[#4B40B5] hover:text-[#859092] font-medium text-sm transition-colors">Read more →</a></div>`;if(CURRENT_USER_ID&&Number(CURRENT_USER_ID)===Number(product.user_id)){actionButtonsHtml=`<div class="flex items-center justify-between pt-4 border-t border-gray-100"><a href="${detailUrl}" class="text-[#4B40B5] hover:text-[#859092] font-medium text-sm transition-colors">Read more  →</a><div class="flex space-x-2"><button onclick="showEditModal(${product.id})" class="text-gray-600 hover:text-gray-700 text-sm transition-colors">Edit</button><button onclick="showDeleteModal(${product.id})" class="text-red-600 hover:text-red-700 text-sm transition-colors">Delete</button></div></div>`;}article.innerHTML=`<div class="aspect-[3/4] relative overflow-hidden">${thumbnailHtml}<div class="absolute top-3 left-3"><span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#4B40B5] text-white">${product.category}</span></div><div class="absolute top-3 right-3 flex space-x-2">${featuredBadge}</div></div><div class="p-6"><h3 class="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight"><a href="${detailUrl}" class="hover:text-[#4B40B5] transition-colors">${product.name}</a></h3><span class="text-sm text-gray-500">${product.brand}</span><div class="mb-4 mt-2"><span class="text-2xl font-bold text-[#4B40B5]">Rp${priceFormatted}</span></div><p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">${product.description}</p>${actionButtonsHtml}</div>`;return article;}
+
+// fungsi untuk ambil data produk dari server secara asynchronous
+async function fetchProducts() {
+    showState({ showLoading: true }); // spinner loading
+    updateFilterButtons(); // update tombol filter
+
+    // buat URL request dengan filter dan page
+    let url = `${GET_PRODUCTS_URL}?filter=${activeFilter}&page=${currentPage}`;
+    if (activeCategory) {
+        url += `&category=${activeCategory}`;
+    }
+
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const data = await response.json(); // balasan server dari JSON ke objek JS
+        productGrid.innerHTML = '';
+
+        if (data.products && data.products.length > 0) { // cek ada produk atau tidak
+            data.products.forEach(product => { // loop per produk
+                const card = createProductCard(product); // bikin card nya
+                productGrid.appendChild(card); // masukkan card ke grid
+            });
+            showState({ showGrid: true });
+        } else {
+            showState({ showEmpty: true });
+        }
+        
+        paginationContainer.innerHTML = data.pagination_html || ''; // masukkan HTML pagination
+
+    } catch (error) {
+        console.error('Fetch error:', error);
+        showState({ showError: true });
+    }
+}
+
+filterAllBtn.addEventListener('click', () => { // all products
+    activeFilter = 'all';
+    currentPage = 1;
+    activeCategory = ''; 
+    fetchProducts();
+});
+
+filterMyBtn.addEventListener('click', () => { // my products
+    activeFilter = 'my';
+    currentPage = 1;
+    activeCategory = ''; 
+    fetchProducts();
+});
+
+refreshBtn.addEventListener('click', fetchProducts); // tombol refresh
+
+paginationContainer.addEventListener('click', (e) => { // pagination links
+    const target = e.target.closest('.pagination-link');
+    if (target) {
+        e.preventDefault();
+        const url = new URL(target.href);
+        currentPage = url.searchParams.get('page');
+        fetchProducts();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const target = e.target.closest('.category-filter-link'); // check link kategori atau bukan
+    if (target) {
+        e.preventDefault(); // jangan refresh
+        const url = new URL(target.href); // ambil URL
+        activeCategory = url.searchParams.get('category'); // nama kategori
+        currentPage = 1; // balik ke hlm 1
+        fetchProducts(); // ambil data sesuai kategori
+        document.getElementById('products-dropdown-menu').classList.add('hidden');
+    }
+});
+
+
+document.addEventListener('product-changed', () => {
+    fetchProducts(); // refresh data (contoh: ada product added)
+});
+
+document.addEventListener('DOMContentLoaded', fetchProducts);
+</script>
 {% endblock content %}

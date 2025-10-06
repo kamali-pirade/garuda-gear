@@ -9,7 +9,7 @@
 <div class="bg-gray-50 w-full min-h-screen">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
-    <!-- Back Navigation -->
+    <!-- back navigation -->
     <div class="mb-6">
       <a href="{% url 'main:show_main' %}" class="text-gray-600 hover:text-gray-900 font-medium transition-colors">
         ← Back to All Products
@@ -20,7 +20,7 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2">
 
-      <!-- Kolom Kiri: Gambar Produk -->
+      <!-- kiri: gambar produk -->
       <div class="p-4">
         {% if product.thumbnail %}
           <div class="aspect-[3/4] w-full">
@@ -33,9 +33,9 @@
         {% endif %}
       </div>
 
-      <!-- Kolom Kanan: Detail Produk -->
+      <!-- kanan: detail produk -->
       <div class="p-8 flex flex-col">
-        <!-- Seller Info -->
+        <!-- seller info -->
         <div class="mb-4">
           <span class="font-medium text-gray-900">
             {% if product.user %}
@@ -46,7 +46,7 @@
           </span>
         </div>
 
-        <!-- Kategori & Status -->
+        <!-- kategori & is featured -->
         <div class="flex flex-wrap items-center gap-2 mb-4">
           <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-[#4B40B5] text-white">
             {{ product.get_category_display }}
@@ -58,7 +58,7 @@
           {% endif %}
         </div>
 
-        <!-- Nama & Brand -->
+        <!-- nama & brand -->
         <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">
           {{ product.name }}
         </h1>
@@ -74,20 +74,19 @@
           <p class="text-sm text-gray-600">Stok: <span class="font-medium text-gray-800">{{ product.stock }}</span></p>
         </div>
 
-        <!-- Deskripsi -->
+        <!-- deskripsi -->
         <div class="prose max-w-none mt-4">
           <div class="text-gray-700 leading-relaxed whitespace-pre-line text-base">
             {{ product.description }}
           </div>
         </div>
 
-        <!-- Edit and Delete -->
+        <!-- edit & delete -->
         <div class="mt-auto pt-8">
           {% if user.is_authenticated and product.user == user %}
             <div class="flex justify-end space-x-4">
-              <a href="{% url 'main:edit_product' product.id %}" class="px-4 py-2 bg-[#4B40B5] text-white rounded-md text-sm font-medium hover:bg-[#372e8c] transition-colors">Edit Product</a>
-              <a href="{% url 'main:delete_product' product.id %}" class="px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-700 transition-colors">Delete Product</a>
-            </div>
+              <button onclick="showEditModal('{{ product.id }}')" class="px-4 py-2 bg-[#4B40B5] text-white rounded-md text-sm font-medium hover:bg-[#372e8c] transition-colors">Edit Product</button>
+              <button onclick="showDeleteModal('{{ product.id }}')" class="px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-700 transition-colors">Delete Product</button>
           {% endif %}
         </div>
       </div>

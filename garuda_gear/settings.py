@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.context_processors.categories_processor',
             ],
         },
     },
@@ -133,6 +134,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+USE_THOUSAND_SEPARATOR = True # pisah ribuan
+THOUSAND_SEPARATOR = '.' # tanda pisah jadi titik
+NUMBER_GROUPING = 3 # tiap 3 digit, contoh: 1.000.000
 
 TIME_ZONE = 'UTC'
 
